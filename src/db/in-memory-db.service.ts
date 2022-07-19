@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/users/user.model';
+import { UserResponse } from 'src/users/models/user-response.model';
+import { User } from 'src/users/models/user.model';
 import { DBlist } from './db-list.model';
 
 @Injectable()
@@ -8,23 +9,36 @@ export class IMDBService {
     users: [],
   };
 
-  getUsers(): User[] {
-    return this.list.users;
+  getUsers(): UserResponse[] {
+    const users = this.list.users.filter((user) => user.isDeleted === false);
+    let result = [...users];
+    result = result.map((item) => {
+      const newItem = Object.assign({}, item);
+      delete newItem.isDeleted;
+      return newItem;
+    });
+    return result;
   }
 
-  getUser(id: string): User {
-    return this.list.users.find((user) => user.id === id);
+  getUser(id: string): UserResponse {
+    const user = this.list.users.find((user) => user.id === id);
+    if (user && user.isDeleted === false) {
+      const result = Object.assign({}, user);
+      delete result.isDeleted;
+      return result;
+    }
+    return;
   }
 
-  addUser(user: User): User {
+  addUser(user: User): UserResponse {
     this.list.users.push(user);
-    return user;
+    return this.getUser(user.id);
   }
 
-  updateUser(id: string, newUserInfo: User): User {
+  updateUser(id: string, user: User): UserResponse {
     const userIndex = this.list.users.findIndex((user) => user.id === id);
-    this.list.users[userIndex] = newUserInfo;
-    return this.list.users[userIndex];
+    this.list.users[userIndex] = user;
+    return this.getUser(user.id);
   }
 
   deleteUser(id: string): void {

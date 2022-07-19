@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IMDBService } from 'src/db/in-memory-db.service';
-import { User } from './user.model';
+import { User } from './models/user.model';
 import { v4 as uuid } from 'uuid';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdateUserDto } from './dto/update.dto';
+import { UserResponse } from './models/user-response.model';
 
 interface getListQueries {
   loginSubstring?: string;
@@ -15,8 +16,8 @@ interface getListQueries {
 export class UserService {
   constructor(private readonly db: IMDBService) {}
 
-  getList({ loginSubstring, limit, offset }: getListQueries): User[] {
-    let result = this.db.getUsers().filter((user) => user.isDeleted !== true);
+  getList({ loginSubstring, limit, offset }: getListQueries): UserResponse[] {
+    let result = this.db.getUsers();
     if (loginSubstring) {
       result = result.filter((user) =>
         user.login.toLowerCase().includes(loginSubstring.toLowerCase()),
@@ -30,16 +31,19 @@ export class UserService {
       result = result.slice(+offset);
     }
     return result.sort((a, b) =>
-      a.login.localeCompare(b.login, 'en', { sensitivity: 'base' }),
+      a.login.localeCompare(b.login, 'en', { sensitivity: 'case' }),
     );
   }
 
-  get(id: string): User {
+  get(id: string): UserResponse {
     const user = this.db.getUser(id);
-    return !user.isDeleted ? user : null;
+    if (!user) {
+      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 
-  add(createUserDto: CreateUserDto): User {
+  add(createUserDto: CreateUserDto): UserResponse {
     const { login, password, age } = createUserDto;
     const user: User = {
       id: uuid(),
@@ -51,17 +55,24 @@ export class UserService {
     return this.db.addUser(user);
   }
 
-  update(id: string, updateUserDto: UpdateUserDto): User {
-    const newUserInfo = Object.assign({}, this.db.getUser(id));
+  update(id: string, updateUserDto: UpdateUserDto): UserResponse {
+    if (!this.db.getUser(id)) {
+      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+    }
+    const user = Object.assign({ isDeleted: false }, this.db.getUser(id));
     for (const [key, value] of Object.entries(updateUserDto)) {
       if (value !== undefined) {
-        newUserInfo[key] = value;
+        user[key] = value;
       }
     }
-    return this.db.updateUser(id, newUserInfo);
+    return this.db.updateUser(id, user);
   }
 
   remove(id: string): void {
-    return this.db.deleteUser(id);
+    if (!this.db.getUser(id)) {
+      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+    }
+    this.db.deleteUser(id);
+    throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 }

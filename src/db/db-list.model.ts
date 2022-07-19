@@ -1,4 +1,4 @@
-import { User } from 'src/users/user.model';
+import { User } from 'src/users/models/user.model';
 
 export interface DBlist {
   users: User[];
