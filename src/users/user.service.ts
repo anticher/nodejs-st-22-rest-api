@@ -18,6 +18,9 @@ export class UserService {
 
   getList({ loginSubstring, limit, offset }: getListQueries): UserResponse[] {
     let result = this.db.getUsers();
+    result.sort((a, b) =>
+      a.login.localeCompare(b.login, 'en', { sensitivity: 'case' }),
+    );
     if (loginSubstring) {
       result = result.filter((user) =>
         user.login.toLowerCase().includes(loginSubstring.toLowerCase()),
@@ -30,9 +33,7 @@ export class UserService {
     } else if (offset) {
       result = result.slice(+offset);
     }
-    return result.sort((a, b) =>
-      a.login.localeCompare(b.login, 'en', { sensitivity: 'case' }),
-    );
+    return result;
   }
 
   get(id: string): UserResponse {
@@ -45,7 +46,10 @@ export class UserService {
 
   add(createUserDto: CreateUserDto): UserResponse {
     const users = this.db.getUsers();
-    if (users.findIndex((user) => user.login === createUserDto.login) >= 0) {
+    const loginIndex = users.findIndex((user) => {
+      return user.login.toLowerCase() === createUserDto.login.toLowerCase();
+    });
+    if (loginIndex >= 0) {
       throw new HttpException('login is already taken', HttpStatus.BAD_REQUEST);
     }
     const { login, password, age } = createUserDto;
