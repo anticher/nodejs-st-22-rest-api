@@ -6,7 +6,10 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
+import { CreateUserDto } from './dto/create.dto';
+import { UpdateUserDto } from './dto/update.dto';
 import { User } from './user.model';
 import { UserService } from './user.service';
 
@@ -15,8 +18,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  getList(): User[] {
-    return this.userService.getList();
+  getList(
+    @Query('loginSubstring') loginSubstring?: string,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+  ): User[] {
+    return this.userService.getList({ loginSubstring, limit, offset });
   }
 
   @Get(':id')
@@ -25,13 +32,16 @@ export class UserController {
   }
 
   @Post()
-  addUser(@Body() user: User): User {
-    return this.userService.add(user);
+  addUser(@Body() createUserDto: CreateUserDto): User {
+    return this.userService.add(createUserDto);
   }
 
   @Put(':id')
-  updateUser(@Param('id') id: string, @Body() user: User): User {
-    return this.userService.update(id, user);
+  updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): User {
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')

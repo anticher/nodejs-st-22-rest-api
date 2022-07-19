@@ -21,18 +21,15 @@ export class IMDBService {
     return user;
   }
 
-  updateUser(id: string, userInfo: User): User {
-    const user = this.list.users.find((user) => user.id === id);
-    for (const [key, value] of Object.entries(userInfo)) {
-      if (value !== undefined) {
-        user[key] = value;
-      }
-    }
-    return user;
+  updateUser(id: string, newUserInfo: User): User {
+    const userIndex = this.list.users.findIndex((user) => user.id === id);
+    this.list.users[userIndex] = newUserInfo;
+    return this.list.users[userIndex];
   }
 
   deleteUser(id: string): void {
-    this.list.users = this.list.users.filter((user) => user.id !== id);
+    const user = this.list.users.find((user) => user.id === id);
+    user.isDeleted = true;
     return;
   }
 }
