@@ -44,6 +44,10 @@ export class UserService {
   }
 
   add(createUserDto: CreateUserDto): UserResponse {
+    const users = this.db.getUsers();
+    if (users.findIndex((user) => user.login === createUserDto.login) >= 0) {
+      throw new HttpException('login is already taken', HttpStatus.BAD_REQUEST);
+    }
     const { login, password, age } = createUserDto;
     const user: User = {
       id: uuid(),
