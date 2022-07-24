@@ -64,16 +64,27 @@ export class UserService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto): UserResponse {
+    const users = this.db.getUsers();
+    const user = this.db.getUser(id);
     if (!this.db.getUser(id)) {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
     }
-    const user = Object.assign({ isDeleted: false }, this.db.getUser(id));
+    if (
+      user.login !== updateUserDto.login &&
+      users.filter((user) => user.login === updateUserDto.login).length > 0
+    ) {
+      throw new HttpException('login is already taken', HttpStatus.BAD_REQUEST);
+    }
+    const updatedUser = Object.assign(
+      { isDeleted: false },
+      this.db.getUser(id),
+    );
     for (const [key, value] of Object.entries(updateUserDto)) {
       if (value !== undefined) {
-        user[key] = value;
+        updatedUser[key] = value;
       }
     }
-    return this.db.updateUser(id, user);
+    return this.db.updateUser(id, updatedUser);
   }
 
   remove(id: string): void {
