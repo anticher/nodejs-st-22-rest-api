@@ -16,7 +16,7 @@ import { UpdateUserDto } from './dto/update.dto';
 import { UserResponse } from './models/user-response.model';
 import { UserService } from './user.service';
 
-@Controller('v1/user')
+@Controller('v1/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
