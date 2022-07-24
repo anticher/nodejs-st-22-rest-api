@@ -92,6 +92,5 @@ export class UserService {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
     }
     this.db.deleteUser(id);
-    throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 }
