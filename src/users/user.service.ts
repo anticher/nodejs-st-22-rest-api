@@ -44,7 +44,7 @@ export class UserService {
     return user;
   }
 
-  add(createUserDto: CreateUserDto): UserResponse {
+  add(createUserDto: CreateUserDto): UserResponse | void {
     const users = this.db.getUsers();
     const loginIndex = users.findIndex((user) => {
       return user.login.toLowerCase() === createUserDto.login.toLowerCase();
@@ -63,10 +63,10 @@ export class UserService {
     return this.db.addUser(user);
   }
 
-  update(id: string, updateUserDto: UpdateUserDto): UserResponse {
+  update(id: string, updateUserDto: UpdateUserDto): UserResponse | void {
     const users = this.db.getUsers();
     const user = this.db.getUser(id);
-    if (!this.db.getUser(id)) {
+    if (!user) {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
     }
     if (
@@ -75,10 +75,7 @@ export class UserService {
     ) {
       throw new HttpException('login is already taken', HttpStatus.BAD_REQUEST);
     }
-    const updatedUser = Object.assign(
-      { isDeleted: false },
-      this.db.getUser(id),
-    );
+    const updatedUser = Object.assign(user, { isDeleted: false });
     for (const [key, value] of Object.entries(updateUserDto)) {
       if (value !== undefined) {
         updatedUser[key] = value;

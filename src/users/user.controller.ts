@@ -39,7 +39,7 @@ export class UserController {
   @Post()
   addUser(
     @Body(new ValidationPipe({ whitelist: true })) createUserDto: CreateUserDto,
-  ): UserResponse {
+  ): UserResponse | void {
     return this.userService.add(createUserDto);
   }
 
@@ -47,7 +47,7 @@ export class UserController {
   updateUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true })) updateUserDto: UpdateUserDto,
-  ): UserResponse {
+  ): UserResponse | void {
     return this.userService.update(id, updateUserDto);
   }
 

@@ -11,31 +11,31 @@ export class IMDBService {
 
   getUsers(): UserResponse[] {
     const users = this.list.users.filter((user) => user.isDeleted === false);
-    let result = [...users];
-    result = result.map((item) => {
-      const newItem = Object.assign({}, item);
-      delete newItem.isDeleted;
-      return newItem;
+    const result: UserResponse[] = [];
+    users.forEach((user) => {
+      const { isDeleted, ...rest } = user;
+      result.push(rest);
     });
     return result;
   }
 
-  getUser(id: string): UserResponse {
-    const user = this.list.users.find((user) => user.id === id);
-    if (user && user.isDeleted === false) {
-      const result = Object.assign({}, user);
-      delete result.isDeleted;
-      return result;
+  getUser(id: string): UserResponse | void {
+    const user = this.list.users.find(
+      (user) => user.id === id && user.isDeleted === false,
+    );
+    if (user) {
+      const { isDeleted, ...rest } = user;
+      return rest;
     }
     return;
   }
 
-  addUser(user: User): UserResponse {
+  addUser(user: User): UserResponse | void {
     this.list.users.push(user);
     return this.getUser(user.id);
   }
 
-  updateUser(id: string, user: User): UserResponse {
+  updateUser(id: string, user: User): UserResponse | void {
     const userIndex = this.list.users.findIndex((user) => user.id === id);
     this.list.users[userIndex] = user;
     return this.getUser(user.id);
@@ -43,7 +43,10 @@ export class IMDBService {
 
   deleteUser(id: string): void {
     const user = this.list.users.find((user) => user.id === id);
-    user.isDeleted = true;
+    if (user) {
+      user.isDeleted = true;
+    }
+
     return;
   }
 }
