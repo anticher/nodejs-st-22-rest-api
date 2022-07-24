@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
   ParseUUIDPipe,
   Post,
   Put,
@@ -23,8 +25,8 @@ export class UserController {
   @Get()
   getList(
     @Query('loginSubstring') loginSubstring?: string,
-    @Query('limit') limit?: string,
-    @Query('offset') offset?: string,
+    @Query('limit', new DefaultValuePipe(15), ParseIntPipe) limit?: number,
+    @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset?: number,
   ): UserResponse[] {
     return this.userService.getList({ loginSubstring, limit, offset });
   }

@@ -8,8 +8,8 @@ import { UserResponse } from './models/user-response.model';
 
 interface getListQueries {
   loginSubstring?: string;
-  limit?: string;
-  offset?: string;
+  limit?: number;
+  offset?: number;
 }
 
 @Injectable()
@@ -26,12 +26,11 @@ export class UserService {
         user.login.toLowerCase().includes(loginSubstring.toLowerCase()),
       );
     }
+    if (offset) {
+      result = result.slice(offset);
+    }
     if (limit) {
-      result = offset
-        ? result.slice(+offset, +offset + +limit)
-        : result.slice(0, +limit);
-    } else if (offset) {
-      result = result.slice(+offset);
+      result = result.slice(0, limit);
     }
     return result;
   }
