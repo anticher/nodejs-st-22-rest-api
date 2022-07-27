@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: postgres
+    image: rest-database
+    build: docker-files/db-docker-file
+    restart: always
+    networks:
+      - webnet
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: test
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  pgadmin:
+    links:
+    - postgres:postgres
+    container_name: pgadmin
+    image: rest-pgadmin
+    build: docker-files/pgadmin-docker-file
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+    - 8080:80
+    volumes:
+    - pgadmin:/root/.pgadmin
+    networks:
+    - webnet
+networks:
+  webnet:
+    name: webnet
+    driver: bridge
+volumes:
+  pgdata:
+  pgadmin:
