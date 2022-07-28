@@ -3,38 +3,42 @@ version: '3.7'
 services:
   postgres:
     container_name: postgres
-    image: rest-database
+    image: database
     build: docker-files/db-docker-file
     restart: always
     networks:
-      - webnet
+      - ${NETWORK_NAME}
+    env_file:
+      - .env
     environment:
-      POSTGRES_PASSWORD: root
-      POSTGRES_USER: root
-      POSTGRES_DB: test
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
       PG_DATA: /var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
       - pgdata:/var/lib/postgresql/data
   pgadmin:
     links:
     - postgres:postgres
     container_name: pgadmin
-    image: rest-pgadmin
+    image: pgadmin
     build: docker-files/pgadmin-docker-file
+    env_file:
+     - .env
     environment:
-      PGADMIN_DEFAULT_EMAIL: root@root.com
-      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
-    - 8080:80
+    - ${PGADMIN_PORT_1}:${PGADMIN_PORT_2}
     volumes:
     - pgadmin:/root/.pgadmin
     networks:
-    - webnet
+    - ${NETWORK_NAME}
 networks:
   webnet:
-    name: webnet
+    name: ${NETWORK_NAME}
     driver: bridge
 volumes:
   pgdata:
