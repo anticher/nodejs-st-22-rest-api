@@ -14,8 +14,6 @@ import { User } from './users/entities/user.entity';
       password: 'root',
       database: 'test',
       models: [User],
-      // autoLoadModels: true,
-      // synchronize: true,
     }),
   ],
   controllers: [],

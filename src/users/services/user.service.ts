@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create.dto';
-import { UpdateUserDto } from './dto/update.dto';
-import { UserResponse } from './models/user-response.model';
-import { User } from './entities/user.entity';
+import { CreateUserDto } from '../dto/create.dto';
+import { UpdateUserDto } from '../dto/update.dto';
+import { UserResponse } from '../models/user-response.model';
+import { User } from '../entities/user.entity';
 import {
   getListQueries,
   UserRepositoryService,
-} from './users-repository.service';
+} from '../data-access/users-repository.data-access';
 
 @Injectable()
 export class UserService {

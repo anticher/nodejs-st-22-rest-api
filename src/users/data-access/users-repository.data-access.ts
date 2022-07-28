@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { v4 as uuid } from 'uuid';
-import { CreateUserDto } from './dto/create.dto';
-import { UpdateUserDto } from './dto/update.dto';
-import { UserResponse } from './models/user-response.model';
+import { CreateUserDto } from '../dto/create.dto';
+import { UpdateUserDto } from '../dto/update.dto';
+import { UserResponse } from '../models/user-response.model';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from './entities/user.entity';
+import { User } from '../entities/user.entity';
 export interface getListQueries {
   loginSubstring?: string;
   limit?: number;
