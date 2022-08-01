@@ -29,7 +29,7 @@ export class UserRepositoryService {
       limit,
       where: {
         login: {
-          [Op.substring]: loginSubstring,
+          [Op.iLike]: `%${loginSubstring}%`,
         },
         isDeleted: false,
       },
