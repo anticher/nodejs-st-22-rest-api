@@ -13,11 +13,11 @@ import {
   Query,
   ValidationPipe,
 } from '@nestjs/common';
-import { User } from './entities/user.entity';
-import { CreateUserDto } from './dto/create.dto';
-import { UpdateUserDto } from './dto/update.dto';
-import { UserResponse } from './models/user-response.model';
-import { UserService } from './user.service';
+import { User } from '../entities/user.entity';
+import { CreateUserDto } from '../dto/create.dto';
+import { UpdateUserDto } from '../dto/update.dto';
+import { UserResponse } from '../models/user-response.model';
+import { UserService } from '../services/user.service';
 
 @Controller('v1/users')
 export class UserController {
