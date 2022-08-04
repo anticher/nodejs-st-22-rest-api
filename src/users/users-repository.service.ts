@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create.dto';
 import { UpdateUserDto } from './dto/update.dto';
 import { UserResponse } from './models/user-response.model';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from './entities/user.entity';
+import { User } from './models/user.model';
 export interface getListQueries {
   loginSubstring?: string;
   limit?: number;
