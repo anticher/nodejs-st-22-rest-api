@@ -13,6 +13,7 @@ import {
   Query,
   ValidationPipe,
 } from '@nestjs/common';
+import { User } from './models/user.model';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdateUserDto } from './dto/update.dto';
 import { UserResponse } from './models/user-response.model';
@@ -27,21 +28,21 @@ export class UserController {
     @Query('loginSubstring') loginSubstring?: string,
     @Query('limit', new DefaultValuePipe(15), ParseIntPipe) limit?: number,
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset?: number,
-  ): UserResponse[] {
+  ): Promise<User[]> {
     return this.userService.getList({ loginSubstring, limit, offset });
   }
 
   @Get(':id')
-  getUser(
+  async getUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): UserResponse {
-    return this.userService.get(id);
+  ): Promise<User | null> {
+    return await this.userService.get(id);
   }
 
   @Post()
   addUser(
     @Body(new ValidationPipe({ whitelist: true })) createUserDto: CreateUserDto,
-  ): UserResponse | void {
+  ): Promise<UserResponse | null> {
     return this.userService.add(createUserDto);
   }
 
@@ -49,7 +50,7 @@ export class UserController {
   updateUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true })) updateUserDto: UpdateUserDto,
-  ): UserResponse | void {
+  ): Promise<UserResponse | null> {
     return this.userService.update(id, updateUserDto);
   }
 
@@ -57,7 +58,7 @@ export class UserController {
   @HttpCode(204)
   removeUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): void {
+  ): Promise<void> {
     return this.userService.remove(id);
   }
 }
