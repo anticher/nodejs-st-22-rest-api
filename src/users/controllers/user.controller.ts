@@ -13,7 +13,7 @@ import {
   Query,
   ValidationPipe,
 } from '@nestjs/common';
-import { User } from '../entities/user.entity';
+import { User } from '../models/user.model';
 import { CreateUserDto } from '../dto/create.dto';
 import { UpdateUserDto } from '../dto/update.dto';
 import { UserResponse } from '../models/user-response.model';
