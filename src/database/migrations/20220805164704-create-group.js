@@ -1,27 +1,26 @@
 'use strict';
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Groups', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      login: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      password: {
+      permissions: {
         type: Sequelize.STRING,
         allowNull: false,
-      },
-      age: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      isDeleted: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
+        get() {
+          return this.getDataValue('permissions').split(';');
+        },
+        set(val) {
+          this.setDataValue('permissions', val.join(';'));
+        },
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +34,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Groups');
   },
 };
