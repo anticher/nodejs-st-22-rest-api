@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { CreateGroupDto } from '../dto/create.dto';
 import { UpdateGroupDto } from '../dto/update.dto';
+import { UserGroupDto } from '../dto/user-group.dto';
 import { GroupService } from '../services/group.service';
 
 @Controller('v1/groups')
@@ -42,14 +43,16 @@ export class GroupController {
     throw new HttpException('group is already exist', HttpStatus.BAD_REQUEST);
   }
 
-  @Post('addUserGroup')
-  async addUserGroup(@Body() UserGroupIds: any) {
+  @Post('addUsersToGroup')
+  async addUsersToGroup(@Body() UserGroupIds: UserGroupDto) {
     const result = await this.groupService.addUsersToGroup(UserGroupIds);
-    // if (result) {
-    //   return result;
-    // }
-    // throw new HttpException('group is already exist', HttpStatus.BAD_REQUEST);
-    return result;
+    if (result) {
+      return result;
+    }
+    throw new HttpException(
+      'something went wrong',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 
   @Put(':id')

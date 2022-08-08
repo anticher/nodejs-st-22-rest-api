@@ -27,5 +27,6 @@ import { UserGroup } from './groups/models/user-group.model';
   ],
   controllers: [],
   providers: [],
+  exports: [],
 })
 export class AppModule {}

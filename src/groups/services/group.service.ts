@@ -3,6 +3,7 @@ import { GroupRepositoryService } from '../data-access/group-repository.data-acc
 import { UserGroupRepositoryService } from '../data-access/user-group-repository.data-acces';
 import { CreateGroupDto } from '../dto/create.dto';
 import { UpdateGroupDto } from '../dto/update.dto';
+import { UserGroupDto } from '../dto/user-group.dto';
 
 @Injectable()
 export class GroupService {
@@ -27,7 +28,7 @@ export class GroupService {
     return await this.groupRepositoryService.add(createGroupDto);
   }
 
-  async addUsersToGroup(userGroupIds: any) {
+  async addUsersToGroup(userGroupIds: UserGroupDto) {
     return await this.userGroupRepositoryService.add(userGroupIds);
   }
 
