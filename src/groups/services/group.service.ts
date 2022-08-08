@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { GroupRepositoryService } from '../data-access/group-repository.data-access';
+import { UserGroupRepositoryService } from '../data-access/user-group-repository.data-acces';
 import { CreateGroupDto } from '../dto/create.dto';
 import { UpdateGroupDto } from '../dto/update.dto';
 
 @Injectable()
 export class GroupService {
-  constructor(private groupRepositoryService: GroupRepositoryService) {}
+  constructor(
+    private groupRepositoryService: GroupRepositoryService,
+    private userGroupRepositoryService: UserGroupRepositoryService,
+  ) {}
 
   async getList() {
     return await this.groupRepositoryService.getAll();
@@ -23,7 +27,11 @@ export class GroupService {
     return await this.groupRepositoryService.add(createGroupDto);
   }
 
-  update(id: string, updateGroupDto: UpdateGroupDto) {
+  async addUsersToGroup(userGroupIds: any) {
+    return await this.userGroupRepositoryService.add(userGroupIds);
+  }
+
+  async update(id: string, updateGroupDto: UpdateGroupDto) {
     return this.groupRepositoryService.updateOne(id, updateGroupDto);
   }
 

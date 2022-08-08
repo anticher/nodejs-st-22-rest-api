@@ -42,6 +42,16 @@ export class GroupController {
     throw new HttpException('group is already exist', HttpStatus.BAD_REQUEST);
   }
 
+  @Post('addUserGroup')
+  async addUserGroup(@Body() UserGroupIds: any) {
+    const result = await this.groupService.addUsersToGroup(UserGroupIds);
+    // if (result) {
+    //   return result;
+    // }
+    // throw new HttpException('group is already exist', HttpStatus.BAD_REQUEST);
+    return result;
+  }
+
   @Put(':id')
   async updateGroup(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
