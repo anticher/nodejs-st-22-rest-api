@@ -3,6 +3,9 @@ import { UserModule } from './users/user.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './users/models/user.model';
 import { ConfigModule } from '@nestjs/config';
+import { GroupModule } from './groups/group.module';
+import { Group } from './groups/models/group.model';
+import { UserGroup } from './groups/models/user-group.model';
 
 @Module({
   imports: [
@@ -17,11 +20,14 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User],
+      models: [User, Group, UserGroup],
+      autoLoadModels: true,
     }),
     UserModule,
+    GroupModule,
   ],
   controllers: [],
   providers: [],
+  exports: [],
 })
 export class AppModule {}
