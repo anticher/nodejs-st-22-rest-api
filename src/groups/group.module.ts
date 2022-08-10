@@ -6,16 +6,11 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { GroupRepositoryService } from './data-access/group-repository.data-access';
 import { IsNameUniqueConstraint } from './validators/group-name-empty.validator';
 import { UserGroup } from './models/user-group.model';
-import { UserGroupRepositoryService } from './data-access/user-group-repository.data-acces';
+import { User } from 'src/users/models/user.model';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Group, UserGroup])],
-  providers: [
-    GroupService,
-    GroupRepositoryService,
-    IsNameUniqueConstraint,
-    UserGroupRepositoryService,
-  ],
+  imports: [SequelizeModule.forFeature([Group, UserGroup, User])],
+  providers: [GroupService, GroupRepositoryService, IsNameUniqueConstraint],
   controllers: [GroupController],
   exports: [SequelizeModule],
 })
