@@ -13,14 +13,8 @@ module.exports = {
         allowNull: false,
       },
       permissions: {
-        type: Sequelize.STRING,
+        type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: false,
-        get() {
-          return this.getDataValue('permissions').split(';');
-        },
-        set(val) {
-          this.setDataValue('permissions', val.join(';'));
-        },
       },
       createdAt: {
         allowNull: false,
