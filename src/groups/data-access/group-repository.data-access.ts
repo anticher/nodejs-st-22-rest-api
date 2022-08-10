@@ -104,8 +104,8 @@ export class GroupRepositoryService {
         await group.$add('users', groupUsers, { transaction: t });
         return group;
       });
-    } catch (error) {
-      return error;
+    } catch (e) {
+      return null;
     }
   }
 }
