@@ -12,6 +12,8 @@ export class GlobalLoggerMiddleware implements NestMiddleware {
       const { statusCode } = response;
       const message = `
       
+      Global-Logger:
+
       method: ${method}
 
       path: ${originalUrl}

@@ -11,6 +11,7 @@ import {
   Post,
   Put,
   Query,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { User } from '../models/user.model';
@@ -18,12 +19,14 @@ import { CreateUserDto } from '../dto/create.dto';
 import { UpdateUserDto } from '../dto/update.dto';
 import { UserResponse } from '../models/user-response.model';
 import { UserService } from '../services/user.service';
+import { ControllerLoggerInterceptor } from 'src/interceptors/controller-logger.interceptor';
 
 @Controller('v1/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseInterceptors(new ControllerLoggerInterceptor('UserController', 'getList'))
   getList(
     @Query('loginSubstring') loginSubstring?: string,
     @Query('limit', new DefaultValuePipe(15), ParseIntPipe) limit?: number,
@@ -33,6 +36,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseInterceptors(new ControllerLoggerInterceptor('UserController', 'getUser'))
   async getUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ): Promise<User | null> {
@@ -40,6 +44,7 @@ export class UserController {
   }
 
   @Post()
+  @UseInterceptors(new ControllerLoggerInterceptor('UserController', 'addUser'))
   addUser(
     @Body(new ValidationPipe({ whitelist: true })) createUserDto: CreateUserDto,
   ): Promise<UserResponse | null> {
@@ -47,6 +52,9 @@ export class UserController {
   }
 
   @Put(':id')
+  @UseInterceptors(
+    new ControllerLoggerInterceptor('UserController', 'updateUser'),
+  )
   updateUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true })) updateUserDto: UpdateUserDto,
@@ -55,6 +63,9 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseInterceptors(
+    new ControllerLoggerInterceptor('UserController', 'removeUser'),
+  )
   @HttpCode(204)
   removeUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,

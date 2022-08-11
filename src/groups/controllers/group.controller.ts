@@ -10,8 +10,10 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
+import { ControllerLoggerInterceptor } from 'src/interceptors/controller-logger.interceptor';
 import { CreateGroupDto } from '../dto/create.dto';
 import { UpdateGroupDto } from '../dto/update.dto';
 import { UserGroupDto } from '../dto/user-group.dto';
@@ -22,16 +24,25 @@ export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
   @Get()
+  @UseInterceptors(
+    new ControllerLoggerInterceptor('GroupController', 'getList'),
+  )
   async getList() {
     return await this.groupService.getList();
   }
 
   @Get(':id')
+  @UseInterceptors(
+    new ControllerLoggerInterceptor('GroupController', 'getGroup'),
+  )
   async getGroup(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return await this.groupService.get(id);
   }
 
   @Post()
+  @UseInterceptors(
+    new ControllerLoggerInterceptor('GroupController', 'addGroup'),
+  )
   async addGroup(
     @Body(new ValidationPipe({ whitelist: true }))
     createGroupDto: CreateGroupDto,
@@ -44,6 +55,9 @@ export class GroupController {
   }
 
   @Post('addUsersToGroup')
+  @UseInterceptors(
+    new ControllerLoggerInterceptor('GroupController', 'addUsersToGroup'),
+  )
   async addUsersToGroup(@Body() UserGroupIds: UserGroupDto) {
     const result = await this.groupService.addUsersToGroup(UserGroupIds);
     if (result) {
@@ -56,6 +70,9 @@ export class GroupController {
   }
 
   @Put(':id')
+  @UseInterceptors(
+    new ControllerLoggerInterceptor('GroupController', 'updateGroup'),
+  )
   async updateGroup(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true }))
@@ -69,6 +86,9 @@ export class GroupController {
   }
 
   @Delete(':id')
+  @UseInterceptors(
+    new ControllerLoggerInterceptor('GroupController', 'removeGroup'),
+  )
   @HttpCode(204)
   async removeGroup(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
