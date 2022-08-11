@@ -37,7 +37,7 @@ export class UserRepositoryService {
     });
   }
 
-  async getOne(id: string): Promise<User | null> {
+  async getOne(id: string): Promise<User | null | string> {
     const user = await this.userModel.findOne({
       where: {
         id,
@@ -46,18 +46,18 @@ export class UserRepositoryService {
       attributes: { exclude: ['isDeleted', 'createdAt', 'updatedAt'] },
     });
     if (!user) {
-      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+      return 'user does not exist';
     }
     return user;
   }
 
-  async add(createUserDto: CreateUserDto): Promise<UserResponse | null> {
+  async add(createUserDto: CreateUserDto): Promise<UserResponse | string | null> {
     const users = await this.userModel.findAll();
     const loginIndex = users.findIndex((user) => {
       return user.login.toLowerCase() === createUserDto.login.toLowerCase();
     });
     if (loginIndex >= 0) {
-      throw new HttpException('login is already taken', HttpStatus.BAD_REQUEST);
+      return 'login is already taken';
     }
     const { login, password, age } = createUserDto;
     const result = await this.userModel.create({
@@ -72,7 +72,7 @@ export class UserRepositoryService {
   async updateOne(
     id: string,
     updateUserDto: UpdateUserDto,
-  ): Promise<UserResponse | null> {
+  ): Promise<UserResponse | string | null> {
     const user = await this.getOne(id);
     const userWithInPutLogin = await this.userModel.findOne({
       where: {
@@ -80,22 +80,22 @@ export class UserRepositoryService {
       },
     });
     if (!user) {
-      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+      return 'user does not exist';
     }
     if (userWithInPutLogin && userWithInPutLogin.id !== id) {
-      throw new HttpException('login is already taken', HttpStatus.BAD_REQUEST);
+      return 'login is already taken';
     }
     await this.userModel.update(updateUserDto, { where: { id } });
     return await this.getOne(id);
   }
 
-  async removeOne(id: string): Promise<void> {
+  async removeOne(id: string): Promise<void | string> {
     const affectedCount = await this.userModel.update(
       { isDeleted: true },
       { where: { id } },
     );
     if (affectedCount[0] !== 1) {
-      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+      return 'user does not exist';
     }
     return;
   }

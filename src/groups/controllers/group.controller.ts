@@ -13,8 +13,8 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { ErrorLoggerInterceptor } from 'src/interceptors/error-logger.interceptor';
-import { TimeLoggerInterceptor } from 'src/interceptors/time-logger.interceptor';
+import { ErrorLoggerInterceptor } from 'src/common/interceptors/error-logger.interceptor';
+import { TimeLoggerInterceptor } from 'src/common/interceptors/time-logger.interceptor';
 import { CreateGroupDto } from '../dto/create.dto';
 import { UpdateGroupDto } from '../dto/update.dto';
 import { UserGroupDto } from '../dto/user-group.dto';
