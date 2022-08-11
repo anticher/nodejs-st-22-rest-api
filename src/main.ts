@@ -5,6 +5,6 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
-  await app.listen(process.env.PORT ? process.env.PORT : 3000);
+  await app.listen(Number(process.env.PORT) || 3000);
 }
 bootstrap();
