@@ -13,7 +13,8 @@ import {
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
-import { ControllerLoggerInterceptor } from 'src/interceptors/controller-logger.interceptor';
+import { ErrorLoggerInterceptor } from 'src/interceptors/error-logger.interceptor';
+import { TimeLoggerInterceptor } from 'src/interceptors/time-logger.interceptor';
 import { CreateGroupDto } from '../dto/create.dto';
 import { UpdateGroupDto } from '../dto/update.dto';
 import { UserGroupDto } from '../dto/user-group.dto';
@@ -25,7 +26,8 @@ export class GroupController {
 
   @Get()
   @UseInterceptors(
-    new ControllerLoggerInterceptor('GroupController', 'getList'),
+    new ErrorLoggerInterceptor('GroupController', 'getList'),
+    new TimeLoggerInterceptor('GroupController', 'getList'),
   )
   async getList() {
     return await this.groupService.getList();
@@ -33,16 +35,15 @@ export class GroupController {
 
   @Get(':id')
   @UseInterceptors(
-    new ControllerLoggerInterceptor('GroupController', 'getGroup'),
+    new ErrorLoggerInterceptor('GroupController', 'getGroup'),
+    new TimeLoggerInterceptor('GroupController', 'getGroup'),
   )
   async getGroup(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return await this.groupService.get(id);
   }
 
   @Post()
-  @UseInterceptors(
-    new ControllerLoggerInterceptor('GroupController', 'addGroup'),
-  )
+  @UseInterceptors(new ErrorLoggerInterceptor('GroupController', 'addGroup'))
   async addGroup(
     @Body(new ValidationPipe({ whitelist: true }))
     createGroupDto: CreateGroupDto,
@@ -56,7 +57,8 @@ export class GroupController {
 
   @Post('addUsersToGroup')
   @UseInterceptors(
-    new ControllerLoggerInterceptor('GroupController', 'addUsersToGroup'),
+    new ErrorLoggerInterceptor('GroupController', 'addUsersToGroup'),
+    new TimeLoggerInterceptor('GroupController', 'addUsersToGroup'),
   )
   async addUsersToGroup(@Body() UserGroupIds: UserGroupDto) {
     const result = await this.groupService.addUsersToGroup(UserGroupIds);
@@ -71,7 +73,8 @@ export class GroupController {
 
   @Put(':id')
   @UseInterceptors(
-    new ControllerLoggerInterceptor('GroupController', 'updateGroup'),
+    new ErrorLoggerInterceptor('GroupController', 'updateGroup'),
+    new TimeLoggerInterceptor('GroupController', 'updateGroup'),
   )
   async updateGroup(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
@@ -87,7 +90,8 @@ export class GroupController {
 
   @Delete(':id')
   @UseInterceptors(
-    new ControllerLoggerInterceptor('GroupController', 'removeGroup'),
+    new ErrorLoggerInterceptor('GroupController', 'removeGroup'),
+    new TimeLoggerInterceptor('GroupController', 'removeGroup'),
   )
   @HttpCode(204)
   async removeGroup(

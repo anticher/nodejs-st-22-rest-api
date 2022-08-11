@@ -9,7 +9,7 @@ import { catchError } from 'rxjs/operators';
 import { inspect } from 'util';
 
 @Injectable()
-export class ControllerLoggerInterceptor implements NestInterceptor {
+export class ErrorLoggerInterceptor implements NestInterceptor {
   controller: string;
   method: string;
 
