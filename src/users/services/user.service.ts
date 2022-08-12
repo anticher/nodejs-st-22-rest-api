@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 import {
   getListQueries,
   UserRepositoryService,
-} from '../data-access/users-repository.data-access';
+} from '../repository/users-repository.service';
 
 @Injectable()
 export class UserService {
@@ -24,22 +24,24 @@ export class UserService {
     });
   }
 
-  async get(id: string): Promise<User | null> {
+  async get(id: string): Promise<User | null | string> {
     return await this.userRepositoryService.getOne(id);
   }
 
-  async add(createUserDto: CreateUserDto): Promise<UserResponse | null> {
+  async add(
+    createUserDto: CreateUserDto,
+  ): Promise<UserResponse | null | string> {
     return await this.userRepositoryService.add(createUserDto);
   }
 
   update(
     id: string,
     updateUserDto: UpdateUserDto,
-  ): Promise<UserResponse | null> {
+  ): Promise<UserResponse | null | string> {
     return this.userRepositoryService.updateOne(id, updateUserDto);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<void | string> {
     return await this.userRepositoryService.removeOne(id);
   }
 }

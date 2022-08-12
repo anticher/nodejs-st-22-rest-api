@@ -10,8 +10,6 @@
 
 - if you want to use my db - download docker app and start it, then use $ npm run start-docker-db
 
-- for migrations and seeders use $ npm run create-rep-with-predefined-entities
-
 - start rest server with $ npm run start
 
 ----------
