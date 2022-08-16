@@ -43,7 +43,10 @@ export class GroupController {
   }
 
   @Post()
-  @UseInterceptors(new ErrorLoggerInterceptor('GroupController', 'addGroup'))
+  @UseInterceptors(
+    new ErrorLoggerInterceptor('GroupController', 'addGroup'),
+    new TimeLoggerInterceptor('GroupController', 'addUsersToGroup'),
+  )
   async addGroup(
     @Body(new ValidationPipe({ whitelist: true }))
     createGroupDto: CreateGroupDto,

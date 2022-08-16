@@ -23,6 +23,7 @@ import { UserResponse } from '../models/user-response.model';
 import { UserService } from '../services/user.service';
 import { ErrorLoggerInterceptor } from 'src/common/interceptors/error-logger.interceptor';
 import { TimeLoggerInterceptor } from 'src/common/interceptors/time-logger.interceptor';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('v1/users')
 export class UserController {
@@ -56,6 +57,7 @@ export class UserController {
     return result;
   }
 
+  @Public()
   @Post()
   @UseInterceptors(
     new ErrorLoggerInterceptor('UserController', 'addUser'),

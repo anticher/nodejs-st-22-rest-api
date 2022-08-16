@@ -7,6 +7,9 @@ import { GroupModule } from './groups/group.module';
 import { Group } from './groups/models/group.model';
 import { UserGroup } from './groups/models/user-group.model';
 import { GlobalLoggerMiddleware } from './common/middlewares/global-logger.middleware';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -26,9 +29,15 @@ import { GlobalLoggerMiddleware } from './common/middlewares/global-logger.middl
     }),
     UserModule,
     GroupModule,
+    AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
   exports: [],
 })
 export class AppModule {

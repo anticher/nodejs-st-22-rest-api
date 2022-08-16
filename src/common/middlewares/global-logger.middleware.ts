@@ -23,13 +23,13 @@ export class GlobalLoggerMiddleware implements NestMiddleware {
       response: ${inspect(response)}
 
       `;
-      if (statusCode >= 500) {
-        return this.logger.error(message);
-      }
-      if (statusCode >= 400) {
-        return this.logger.warn(message);
-      }
-      return this.logger.log(message);
+      // if (statusCode >= 500) {
+      //   return this.logger.error(message);
+      // }
+      // if (statusCode >= 400) {
+      //   return this.logger.warn(message);
+      // }
+      // return this.logger.log(message);
     });
     next();
   }

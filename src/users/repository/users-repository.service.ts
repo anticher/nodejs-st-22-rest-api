@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { v4 as uuid } from 'uuid';
 import { CreateUserDto } from '../dto/create.dto';
@@ -51,7 +51,23 @@ export class UserRepositoryService {
     return user;
   }
 
-  async add(createUserDto: CreateUserDto): Promise<UserResponse | string | null> {
+  async getOneByName(name: string): Promise<User | string> {
+    const user = await this.userModel.findOne({
+      where: {
+        login: name,
+        isDeleted: false,
+      },
+      attributes: { exclude: ['isDeleted', 'createdAt', 'updatedAt'] },
+    });
+    if (!user) {
+      return 'user does not exist';
+    }
+    return user;
+  }
+
+  async add(
+    createUserDto: CreateUserDto,
+  ): Promise<UserResponse | string | null> {
     const users = await this.userModel.findAll();
     const loginIndex = users.findIndex((user) => {
       return user.login.toLowerCase() === createUserDto.login.toLowerCase();
