@@ -12,6 +12,7 @@ process.on('uncaughtException', (err) => {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   await app.listen(Number(process.env.PORT) || 3000);
 }
