@@ -7,22 +7,23 @@ import { v4 as uuid } from 'uuid';
 import { User } from 'src/users/models/user.model';
 import { UserGroupDto } from '../dto/user-group.dto';
 import { Sequelize } from 'sequelize-typescript';
+import { GroupResponse } from '../models/group-response.model';
 
 @Injectable()
 export class GroupRepositoryService {
   constructor(
-    private sequelize: Sequelize,
+    private readonly sequelize: Sequelize,
     @InjectModel(Group)
-    private groupModel: typeof Group,
+    private readonly groupModel: typeof Group,
     @InjectModel(User)
-    private userModel: typeof User,
+    private readonly userModel: typeof User,
   ) {}
 
-  async getAll() {
+  public async getAll(): Promise<GroupResponse[]> {
     return await this.groupModel.findAll();
   }
 
-  async getOneByName(name: string) {
+  public async getOneByName(name: string): Promise<GroupResponse | null> {
     const group = await this.groupModel.findOne({
       where: {
         name,
@@ -34,7 +35,7 @@ export class GroupRepositoryService {
     return group;
   }
 
-  async getOne(id: string) {
+  public async getOne(id: string): Promise<GroupResponse | null> {
     const group = await this.groupModel.findOne({
       where: {
         id,
@@ -46,7 +47,9 @@ export class GroupRepositoryService {
     return group;
   }
 
-  async add(createGroupDto: CreateGroupDto) {
+  public async add(
+    createGroupDto: CreateGroupDto,
+  ): Promise<GroupResponse | null> {
     const groupInDatabase = await this.groupModel.findOne({
       where: {
         name: createGroupDto.name,
@@ -64,7 +67,10 @@ export class GroupRepositoryService {
     return this.getOne(result.id);
   }
 
-  async updateOne(id: string, updateGroupDto: UpdateGroupDto) {
+  public async updateOne(
+    id: string,
+    updateGroupDto: UpdateGroupDto,
+  ): Promise<GroupResponse | null> {
     const group = await this.getOne(id);
     if (!group) {
       return null;
@@ -73,7 +79,7 @@ export class GroupRepositoryService {
     return await this.getOne(id);
   }
 
-  async removeOne(id: string) {
+  public async removeOne(id: string): Promise<number | null> {
     const group = await this.getOne(id);
     if (!group) {
       return null;
@@ -81,7 +87,9 @@ export class GroupRepositoryService {
     return this.groupModel.destroy({ where: { id } });
   }
 
-  async addUsersToGroup(userGroupIds: UserGroupDto) {
+  public async addUsersToGroup(
+    userGroupIds: UserGroupDto,
+  ): Promise<GroupResponse | null> {
     try {
       return await this.sequelize.transaction(async (t) => {
         const { groupId, userIds } = userGroupIds;

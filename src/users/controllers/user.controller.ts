@@ -34,7 +34,7 @@ export class UserController {
     new ErrorLoggerInterceptor('UserController', 'getList'),
     new TimeLoggerInterceptor('UserController', 'getList'),
   )
-  getList(
+  public getList(
     @Query('loginSubstring') loginSubstring?: string,
     @Query('limit', new DefaultValuePipe(15), ParseIntPipe) limit?: number,
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset?: number,
@@ -47,7 +47,7 @@ export class UserController {
     new ErrorLoggerInterceptor('UserController', 'getUser'),
     new TimeLoggerInterceptor('UserController', 'getUser'),
   )
-  async getUser(
+  public async getUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ): Promise<User | null | string> {
     const result = await this.userService.get(id);
@@ -63,7 +63,7 @@ export class UserController {
     new ErrorLoggerInterceptor('UserController', 'addUser'),
     new TimeLoggerInterceptor('UserController', 'addUser'),
   )
-  async addUser(
+  public async addUser(
     @Body(new ValidationPipe({ whitelist: true })) createUserDto: CreateUserDto,
   ): Promise<UserResponse | null | string> {
     const result = await this.userService.add(createUserDto);
@@ -78,7 +78,7 @@ export class UserController {
     new ErrorLoggerInterceptor('UserController', 'updateUser'),
     new TimeLoggerInterceptor('UserController', 'updateUser'),
   )
-  async updateUser(
+  public async updateUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true })) updateUserDto: UpdateUserDto,
   ): Promise<UserResponse | null | string> {
@@ -98,7 +98,7 @@ export class UserController {
     new TimeLoggerInterceptor('UserController', 'removeUser'),
   )
   @HttpCode(204)
-  async removeUser(
+  public async removeUser(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ): Promise<void | string> {
     const result = await this.userService.remove(id);

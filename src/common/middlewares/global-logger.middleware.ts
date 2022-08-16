@@ -6,7 +6,7 @@ import { inspect } from 'util';
 export class GlobalLoggerMiddleware implements NestMiddleware {
   private readonly logger = new Logger('HTTP');
 
-  use(request: Request, response: Response, next: NextFunction) {
+  public use(request: Request, response: Response, next: NextFunction): any {
     response.on('close', () => {
       const { method, originalUrl } = request;
       const { statusCode } = response;
@@ -23,13 +23,13 @@ export class GlobalLoggerMiddleware implements NestMiddleware {
       response: ${inspect(response)}
 
       `;
-      // if (statusCode >= 500) {
-      //   return this.logger.error(message);
-      // }
-      // if (statusCode >= 400) {
-      //   return this.logger.warn(message);
-      // }
-      // return this.logger.log(message);
+      if (statusCode >= 500) {
+        return this.logger.error(message);
+      }
+      if (statusCode >= 400) {
+        return this.logger.warn(message);
+      }
+      return this.logger.log(message);
     });
     next();
   }

@@ -16,10 +16,10 @@ export interface getListQueries {
 export class UserRepositoryService {
   constructor(
     @InjectModel(User)
-    private userModel: typeof User,
+    private readonly userModel: typeof User,
   ) {}
 
-  async getAll({
+  public async getAll({
     loginSubstring,
     limit,
     offset,
@@ -37,7 +37,7 @@ export class UserRepositoryService {
     });
   }
 
-  async getOne(id: string): Promise<User | null | string> {
+  public async getOne(id: string): Promise<User | null | string> {
     const user = await this.userModel.findOne({
       where: {
         id,
@@ -51,7 +51,7 @@ export class UserRepositoryService {
     return user;
   }
 
-  async getOneByName(name: string): Promise<User | string> {
+  public async getOneByName(name: string): Promise<User | string> {
     const user = await this.userModel.findOne({
       where: {
         login: name,
@@ -65,7 +65,7 @@ export class UserRepositoryService {
     return user;
   }
 
-  async add(
+  public async add(
     createUserDto: CreateUserDto,
   ): Promise<UserResponse | string | null> {
     const users = await this.userModel.findAll();
@@ -85,7 +85,7 @@ export class UserRepositoryService {
     return this.getOne(result.id);
   }
 
-  async updateOne(
+  public async updateOne(
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<UserResponse | string | null> {
@@ -105,7 +105,7 @@ export class UserRepositoryService {
     return await this.getOne(id);
   }
 
-  async removeOne(id: string): Promise<void | string> {
+  public async removeOne(id: string): Promise<void | string> {
     const affectedCount = await this.userModel.update(
       { isDeleted: true },
       { where: { id } },

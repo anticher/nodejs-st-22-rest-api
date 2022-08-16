@@ -10,15 +10,18 @@ import { inspect } from 'util';
 
 @Injectable()
 export class ErrorLoggerInterceptor implements NestInterceptor {
-  controller: string;
-  method: string;
+  private controller: string;
+  private method: string;
 
   constructor(controller: string, method: string) {
     this.controller = controller;
     this.method = method;
   }
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  public intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
     return next.handle().pipe(
       catchError((err) => {
         const http = context.switchToHttp();
@@ -38,6 +41,7 @@ export class ErrorLoggerInterceptor implements NestInterceptor {
 
         `);
         console.log(this.method);
+        // return new Error(err);
         return throwError(err);
       }),
     );

@@ -11,17 +11,19 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(loginDto: LoginDto) {
+  public async login(
+    loginDto: LoginDto,
+  ): Promise<{ accessToken: string } | string> {
     const user = await this.userRepositoryService.getOneByName(
       loginDto.username,
     );
     if (typeof user === 'string' || user.password !== loginDto.password) {
       return 'no user with such login or password does not match actual one';
     }
-    return await this.getToken(user);
+    return this.getToken(user);
   }
 
-  async getToken(user: User) {
+  private getToken(user: User): { accessToken: string } {
     const payload = { username: user.login, sub: user.id };
     return {
       accessToken: this.jwtService.sign(payload, {

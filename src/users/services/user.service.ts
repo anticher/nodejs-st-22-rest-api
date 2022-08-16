@@ -10,9 +10,9 @@ import {
 
 @Injectable()
 export class UserService {
-  constructor(private userRepositoryService: UserRepositoryService) {}
+  constructor(private readonly userRepositoryService: UserRepositoryService) {}
 
-  async getList({
+  public async getList({
     loginSubstring,
     limit,
     offset,
@@ -24,24 +24,24 @@ export class UserService {
     });
   }
 
-  async get(id: string): Promise<User | null | string> {
+  public async get(id: string): Promise<User | null | string> {
     return await this.userRepositoryService.getOne(id);
   }
 
-  async add(
+  public async add(
     createUserDto: CreateUserDto,
   ): Promise<UserResponse | null | string> {
     return await this.userRepositoryService.add(createUserDto);
   }
 
-  update(
+  public update(
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<UserResponse | null | string> {
     return this.userRepositoryService.updateOne(id, updateUserDto);
   }
 
-  async remove(id: string): Promise<void | string> {
+  public async remove(id: string): Promise<void | string> {
     return await this.userRepositoryService.removeOne(id);
   }
 }
