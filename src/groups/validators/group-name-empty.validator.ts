@@ -11,7 +11,7 @@ import { GroupService } from '../services/group.service';
 export class IsNameUniqueConstraint implements ValidatorConstraintInterface {
   constructor(private readonly groupService: GroupService) {}
 
-  async validate(name: string) {
+  public async validate(name: string): Promise<boolean> {
     return !(await this.groupService.getOneByName(name));
   }
 
@@ -20,7 +20,9 @@ export class IsNameUniqueConstraint implements ValidatorConstraintInterface {
   }
 }
 
-export function IsNameUnique(validationOptions?: ValidationOptions) {
+export function IsNameUnique(
+  validationOptions?: ValidationOptions,
+): (object: any, propertyName: string) => void {
   return function (object: any, propertyName: string) {
     registerDecorator({
       name: 'IsNameUnique',

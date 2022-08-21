@@ -10,35 +10,31 @@ import { inspect } from 'util';
 
 @Injectable()
 export class ErrorLoggerInterceptor implements NestInterceptor {
-  controller: string;
-  method: string;
-
-  constructor(controller: string, method: string) {
-    this.controller = controller;
-    this.method = method;
-  }
-
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  public intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
     return next.handle().pipe(
       catchError((err) => {
         const http = context.switchToHttp();
         const request = http.getRequest();
         const response = http.getResponse();
+        const method = context.getHandler().name;
+        const controller = context.getClass().name;
         console.log(`
 
         Controller-Logger:
 
-        constroller: ${this.controller}
+        constroller: ${controller}
 
-        method: ${this.method}
+        method: ${method}
 
         request: ${inspect(request)}
 
         response: ${inspect(response)}
 
         `);
-        console.log(this.method);
-        return throwError(err);
+        return throwError(() => new Error(err));
       }),
     );
   }

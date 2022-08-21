@@ -6,7 +6,7 @@ import { inspect } from 'util';
 export class GlobalLoggerMiddleware implements NestMiddleware {
   private readonly logger = new Logger('HTTP');
 
-  use(request: Request, response: Response, next: NextFunction) {
+  public use(request: Request, response: Response, next: NextFunction): any {
     response.on('close', () => {
       const { method, originalUrl } = request;
       const { statusCode } = response;

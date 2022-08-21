@@ -9,23 +9,19 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class TimeLoggerInterceptor implements NestInterceptor {
-  controller: string;
-  method: string;
-
-  constructor(controller: string, method: string) {
-    this.controller = controller;
-    this.method = method;
-  }
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  public intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
     const now = Date.now();
+    const method = context.getHandler().name;
+    const controller = context.getClass().name;
     return next
       .handle()
       .pipe(
         tap(() =>
           console.log(
-            `${this.controller} ${this.method} execution time: ${
-              Date.now() - now
-            }ms`,
+            `${controller} ${method} execution time: ${Date.now() - now}ms`,
           ),
         ),
       );

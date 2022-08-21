@@ -3,36 +3,46 @@ import { GroupRepositoryService } from '../repository/group-repository.service';
 import { CreateGroupDto } from '../dto/create.dto';
 import { UpdateGroupDto } from '../dto/update.dto';
 import { UserGroupDto } from '../dto/user-group.dto';
+import { GroupResponse } from '../models/group-response.model';
 
 @Injectable()
 export class GroupService {
-  constructor(private groupRepositoryService: GroupRepositoryService) {}
+  constructor(
+    private readonly groupRepositoryService: GroupRepositoryService,
+  ) {}
 
-  async getList() {
+  public async getList(): Promise<GroupResponse[]> {
     return await this.groupRepositoryService.getAll();
   }
 
-  async get(id: string) {
+  public async get(id: string): Promise<GroupResponse | null> {
     return await this.groupRepositoryService.getOne(id);
   }
 
-  async getOneByName(name: string) {
+  public async getOneByName(name: string): Promise<GroupResponse | null> {
     return await this.groupRepositoryService.getOneByName(name);
   }
 
-  async add(createGroupDto: CreateGroupDto) {
+  public async add(
+    createGroupDto: CreateGroupDto,
+  ): Promise<GroupResponse | null> {
     return await this.groupRepositoryService.add(createGroupDto);
   }
 
-  async addUsersToGroup(userGroupIds: UserGroupDto) {
+  public async addUsersToGroup(
+    userGroupIds: UserGroupDto,
+  ): Promise<GroupResponse | null> {
     return await this.groupRepositoryService.addUsersToGroup(userGroupIds);
   }
 
-  async update(id: string, updateGroupDto: UpdateGroupDto) {
+  public async update(
+    id: string,
+    updateGroupDto: UpdateGroupDto,
+  ): Promise<GroupResponse | null> {
     return this.groupRepositoryService.updateOne(id, updateGroupDto);
   }
 
-  async remove(id: string) {
+  public async remove(id: string): Promise<number | null> {
     return await this.groupRepositoryService.removeOne(id);
   }
 }
