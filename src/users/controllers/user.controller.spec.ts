@@ -102,6 +102,17 @@ describe('UserController', () => {
   });
 
   describe('addUser', () => {
+    it('should throw 400 HttpException', async () => {
+      mockData = { [mockUUID1]: { ...mockUser1, id: mockUUID1 } };
+      try {
+        await controller.addUser(mockUser1);
+      } catch (error) {
+        expect(error).toHaveProperty('response', 'login is already taken');
+        expect(error).toHaveProperty('status', 400);
+        expect(error).toBeInstanceOf(HttpException);
+      }
+    });
+
     it('should add user', async () => {
       const userWithId = await controller.addUser(mockUser1);
       expect((await controller.getList()).length).toBe(1);
@@ -110,16 +121,6 @@ describe('UserController', () => {
       expect(userWithId).toHaveProperty('age', 20);
       expect(userWithId).toHaveProperty('password', 'mockPass');
       expect(userWithId).toHaveProperty('id');
-    });
-
-    it('should throw 400 HttpException', async () => {
-      try {
-        await controller.addUser(mockUser1);
-      } catch (error) {
-        expect(error).toHaveProperty('response', 'login is already taken');
-        expect(error).toHaveProperty('status', 400);
-        expect(error).toBeInstanceOf(HttpException);
-      }
     });
   });
 

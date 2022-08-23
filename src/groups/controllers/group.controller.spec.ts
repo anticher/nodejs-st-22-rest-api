@@ -88,8 +88,6 @@ const mockGroupRepositoryService = {
         return null;
       }
     }
-    console.log(mockData);
-    console.log(mockData[userGroupDto.groupId]);
     return mockData[userGroupDto.groupId];
   },
 };
