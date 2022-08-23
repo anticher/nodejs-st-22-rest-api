@@ -134,7 +134,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('getOne', () => {
+  describe('getUser', () => {
     it('should throw HttpException', async () => {
       try {
         await controller.getUser(mockUUID1);
@@ -145,14 +145,14 @@ describe('UserController', () => {
       }
     });
 
-    it('should return user1', async () => {
+    it('should return user', async () => {
       const mockUserWithId = { ...mockUser1, id: mockUUID1 };
       mockData[mockUUID1] = mockUserWithId;
       expect(await controller.getUser(mockUUID1)).toBe(mockUserWithId);
     });
   });
 
-  describe('updateOne', () => {
+  describe('updateUser', () => {
     it('should throw 404 HttpException', async () => {
       try {
         await controller.updateUser(mockUUID1, mockUser1);
@@ -190,7 +190,7 @@ describe('UserController', () => {
     });
   });
 
-  describe('removeOne', () => {
+  describe('removeUser', () => {
     it('should throw 404 HttpException', async () => {
       try {
         await controller.removeUser(mockUUID1);
@@ -201,7 +201,7 @@ describe('UserController', () => {
       }
     });
 
-    it('should delete user1', async () => {
+    it('should delete user', async () => {
       const mockUserWithId1 = { ...mockUser1, id: mockUUID1 };
       mockData[mockUUID1] = mockUserWithId1;
       const result = await controller.removeUser(mockUUID1);

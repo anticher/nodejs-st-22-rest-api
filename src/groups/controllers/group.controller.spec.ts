@@ -123,7 +123,7 @@ describe('GroupController', () => {
       expect(await controller.getList()).toStrictEqual([]);
     });
 
-    it('should return array with mockGroup1', async () => {
+    it('should return array with group', async () => {
       mockData = { [mockUUID1]: { ...mockGroup1, id: mockUUID1 } };
       expect(await controller.getList()).toStrictEqual([
         {
@@ -157,20 +157,20 @@ describe('GroupController', () => {
     });
   });
 
-  describe('getOne', () => {
+  describe('getGroup', () => {
     it('should return null', async () => {
       const result = await controller.getGroup(mockUUID1);
       expect(result).toBe(null);
     });
 
-    it('should return group1', async () => {
+    it('should return group', async () => {
       const mockGroupWithId = { ...mockGroup1, id: mockUUID1 };
       mockData[mockUUID1] = mockGroupWithId;
       expect(await controller.getGroup(mockUUID1)).toBe(mockGroupWithId);
     });
   });
 
-  describe('updateOne', () => {
+  describe('updateGroup', () => {
     it('should throw 404 HttpException', async () => {
       try {
         await controller.updateGroup(mockUUID1, mockGroup1);
@@ -193,7 +193,7 @@ describe('GroupController', () => {
     });
   });
 
-  describe('removeOne', () => {
+  describe('removeGroup', () => {
     it('should throw 404 HttpException', async () => {
       try {
         await controller.removeGroup(mockUUID1);
@@ -204,7 +204,7 @@ describe('GroupController', () => {
       }
     });
 
-    it('should delete group1', async () => {
+    it('should delete group', async () => {
       const mockGroupWithId1 = { ...mockGroup1, id: mockUUID1 };
       mockData[mockUUID1] = mockGroupWithId1;
       const result = await controller.removeGroup(mockUUID1);
