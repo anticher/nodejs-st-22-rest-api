@@ -31,7 +31,7 @@ export class UserService {
   public async add(
     createUserDto: CreateUserDto,
   ): Promise<UserResponse | null | string> {
-    return await this.userRepositoryService.add(createUserDto);
+    return await this.userRepositoryService.addOne(createUserDto);
   }
 
   public update(

@@ -5,8 +5,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { UserGroup } from 'src/groups/models/user-group.model';
-import { User } from 'src/users/models/user.model';
+import { UserGroup } from '../../groups/models/user-group.model';
+import { User } from '../../users/models/user.model';
 import { Permission } from './group-permission.model';
 
 @Table
