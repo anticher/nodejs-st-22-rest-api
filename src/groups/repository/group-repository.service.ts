@@ -4,7 +4,7 @@ import { CreateGroupDto } from '../dto/create.dto';
 import { UpdateGroupDto } from '../dto/update.dto';
 import { Group } from '../models/group.model';
 import { v4 as uuid } from 'uuid';
-import { User } from 'src/users/models/user.model';
+import { User } from '../../users/models/user.model';
 import { UserGroupDto } from '../dto/user-group.dto';
 import { Sequelize } from 'sequelize-typescript';
 import { GroupResponse } from '../models/group-response.model';
@@ -47,7 +47,7 @@ export class GroupRepositoryService {
     return group;
   }
 
-  public async add(
+  public async addOne(
     createGroupDto: CreateGroupDto,
   ): Promise<GroupResponse | null> {
     const groupInDatabase = await this.groupModel.findOne({
