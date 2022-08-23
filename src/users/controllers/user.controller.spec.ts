@@ -96,8 +96,18 @@ describe('UserController', () => {
   });
 
   describe('getList', () => {
-    it('should return an array of users', async () => {
+    it('should return empty array', async () => {
       expect(await controller.getList()).toStrictEqual([]);
+    });
+
+    it('should return array with mockUser1', async () => {
+      mockData = { [mockUUID1]: { ...mockUser1, id: mockUUID1 } };
+      expect(await controller.getList()).toStrictEqual([
+        {
+          ...mockUser1,
+          id: mockUUID1,
+        },
+      ]);
     });
   });
 

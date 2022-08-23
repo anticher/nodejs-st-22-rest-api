@@ -119,8 +119,18 @@ describe('GroupController', () => {
   });
 
   describe('getList', () => {
-    it('should return an array of groups', async () => {
+    it('should return empty array', async () => {
       expect(await controller.getList()).toStrictEqual([]);
+    });
+
+    it('should return array with mockGroup1', async () => {
+      mockData = { [mockUUID1]: { ...mockGroup1, id: mockUUID1 } };
+      expect(await controller.getList()).toStrictEqual([
+        {
+          ...mockGroup1,
+          id: mockUUID1,
+        },
+      ]);
     });
   });
 
