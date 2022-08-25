@@ -22,12 +22,29 @@ const mockUser2 = {
   password: 'mockPass2',
 };
 
+const mockUser3 = {
+  login: 'mock3',
+  age: 23,
+  password: 'mockPass2',
+};
+
 const mockUUID1 = '0f682e16-4d10-4b16-8999-acc596f435e6';
 
 const mockUUID2 = '0f682e16-4d10-4b16-8999-acc596f435e7';
 
+const mockUUID3 = '0f682e16-4d10-4b16-8999-acc596f435e8';
+
 const mockUserRepositoryService = {
-  getAll: () => Object.values(mockData),
+  getAll: ({ loginSubstring = '', limit, offset = 0 }) => {
+    const data = Object.values(mockData);
+    const filtredData = data.filter((user) =>
+      user.login.includes(loginSubstring),
+    );
+    if (limit) {
+      return filtredData.slice(offset, offset + limit);
+    }
+    return filtredData.slice(offset);
+  },
   getOne: (id: string) => {
     const result = mockData[id];
     if (result) {
@@ -109,6 +126,20 @@ describe('UserController', () => {
         },
       ]);
     });
+
+    it('should return array with mockUser2', async () => {
+      mockData = {
+        [mockUUID1]: { ...mockUser1, id: mockUUID1 },
+        [mockUUID2]: { ...mockUser2, id: mockUUID2 },
+        [mockUUID3]: { ...mockUser3, id: mockUUID3 },
+      };
+      expect(await controller.getList('mock', 1, 1)).toStrictEqual([
+        {
+          ...mockUser2,
+          id: mockUUID2,
+        },
+      ]);
+    });
   });
 
   describe('addUser', () => {
@@ -125,7 +156,7 @@ describe('UserController', () => {
 
     it('should add user', async () => {
       const userWithId = await controller.addUser(mockUser1);
-      expect((await controller.getList()).length).toBe(1);
+      expect(Object.values(mockData).length).toBe(1);
       expect(userWithId).not.toBe(null);
       expect(userWithId).toHaveProperty('login', 'mock');
       expect(userWithId).toHaveProperty('age', 20);
