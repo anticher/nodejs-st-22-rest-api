@@ -65,7 +65,7 @@ export class UserRepositoryService {
     return user;
   }
 
-  public async add(
+  public async addOne(
     createUserDto: CreateUserDto,
   ): Promise<UserResponse | string | null> {
     const users = await this.userModel.findAll();

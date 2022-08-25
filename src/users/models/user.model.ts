@@ -5,8 +5,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Group } from 'src/groups/models/group.model';
-import { UserGroup } from 'src/groups/models/user-group.model';
+import { Group } from '../../groups/models/group.model';
+import { UserGroup } from '../../groups/models/user-group.model';
 
 @Table
 export class User extends Model {

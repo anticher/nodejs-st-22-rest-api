@@ -20,7 +20,7 @@ import { CreateUserDto } from '../dto/create.dto';
 import { UpdateUserDto } from '../dto/update.dto';
 import { UserResponse } from '../models/user-response.model';
 import { UserService } from '../services/user.service';
-import { Public } from 'src/common/decorators/public.decorator';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Controller('v1/users')
 export class UserController {

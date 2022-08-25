@@ -26,7 +26,7 @@ export class GroupService {
   public async add(
     createGroupDto: CreateGroupDto,
   ): Promise<GroupResponse | null> {
-    return await this.groupRepositoryService.add(createGroupDto);
+    return await this.groupRepositoryService.addOne(createGroupDto);
   }
 
   public async addUsersToGroup(

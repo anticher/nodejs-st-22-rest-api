@@ -34,7 +34,7 @@ export class ErrorLoggerInterceptor implements NestInterceptor {
         response: ${inspect(response)}
 
         `);
-        return throwError(() => new Error(err));
+        return throwError(err);
       }),
     );
   }
