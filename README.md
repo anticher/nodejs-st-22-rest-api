@@ -1,6 +1,6 @@
 - git clone rep
 
-- git switch <last branch>
+- git switch < last branch >
 
 - rename .env.example => .env
 
